@@ -1,0 +1,24 @@
+<div class="{{#unless props.list}}hidden{{/unless}}">
+    <a data-onclick="closeList" class="back-btn">back</a>
+    <h1>{{props.list.name}}</h1>
+    {{#if props.list.todos}}
+        <ul>
+            {{#each props.list.todos}}
+                <li>
+                    <a data-onclick="toggleTodoStatus"
+                        data-status="{{done}}"
+                        data-todo-id="{{id}}"
+                        data-list-id="{{../props.list.id}}"
+                        class="{{#if done}}done{{/if}}">
+                        {{text}}
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p class="notice">Those todos aren't going to add themselves. Let's add some todos where we can get to done.</p>
+    {{/if}}
+    <form data-onsubmit="addTodo" data-list-id="{{props.list.id}}">
+        <input id="todo-text" type="text" name="todo" placeholder="Enter your todo and press enter">
+    </form>
+</div>

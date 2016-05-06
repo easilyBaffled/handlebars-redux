@@ -1,0 +1,21 @@
+<div class="{{#if props.list}}hidden{{/if}}">
+    <h1>your lists</h1>
+    {{#if props.lists}}
+        <ul>
+            {{#each props.lists}}
+                <li>
+                    <a data-onclick="selectList" data-id="{{id}}">
+                        {{name}}
+                    </a>
+                </li>
+            {{/each}}
+        </ul>
+    {{else}}
+        <p class="notice">
+            You haven't added any lists yet. To begin, give your list a name and press enter
+        </p>
+    {{/if}}
+    <form data-onsubmit="AddTodoList">
+        <input type="text" name="listName" placeholder="Give your list a name and press enter">
+    </form>
+</div>
