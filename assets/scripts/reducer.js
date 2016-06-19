@@ -18,6 +18,7 @@ function itemById(id, items) {
 // the global state that is passed to all components
 export function todoApp(state=initialState, action)
 {
+    console.log('ACTION: ', action.type);
     switch (action.type) {
         case INIT_WITH_DATA:
             return _.extend(state, action.data);

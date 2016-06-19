@@ -43,16 +43,17 @@ function registerComponents(Handlebars, components, store) {
         var componentIndex = data.data.root.component._componentIds.indexOf(divName);
         var component;
         console.log('component helper: ', name, data, componentIndex);
-        if (componentIndex  === -1) {
+        if (componentIndex  === -1 && divName !== 'root') {
           data.data.root.component._componentIds.push(divName);
           component = new components[name](divName); //This is where the CMP objects are, you must create an instance of it and save that to the room cmp
+          component.setDispatch(dispatch);
           data.data.root.component.components.push(component);
-          console.log('cmp', data.data.root.component);
         } else {
           component = data.data.root.component.components[componentIndex];
         }
 
         //ensure the cmp is wrapped by it's id
+        setTimeout(() => component.bindActions(), 0);
         return '<div id="' + divName + '" data-component="' + name + '">'+component.render(data.hash)+'</div>';
     });
 }
@@ -90,5 +91,5 @@ function connect(store, component) {
         }
     };
 
-    trySubscribe();
+    // trySubscribe(); // this was causing the page to render twice, which didn't seem to break anything but it pissed me off
 }

@@ -102,8 +102,6 @@
 	    value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 	var _app = __webpack_require__(2);
 
 	var _app2 = _interopRequireDefault(_app);
@@ -126,13 +124,6 @@
 
 	var App = function (_HandlebarsComponent) {
 	    _inherits(App, _HandlebarsComponent);
-
-	    _createClass(App, [{
-	        key: 'shouldComponentUpdate',
-	        value: function shouldComponentUpdate(props, state) {
-	            return false;
-	        }
-	    }]);
 
 	    function App(el) {
 	        _classCallCheck(this, App);
@@ -166,7 +157,7 @@
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1, alias1=depth0 != null ? depth0 : {};
 
-	  return "<div>\n    "
+	  return "<div id='root'>\n    "
 	    + ((stack1 = helpers.unless.call(alias1,((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1),{"name":"unless","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
 	    + "\n    "
 	    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -1420,16 +1411,17 @@
 	        var componentIndex = data.data.root.component._componentIds.indexOf(divName);
 	        var component;
 	        console.log('component helper: ', name, data, componentIndex);
-	        if (componentIndex  === -1) {
+	        if (componentIndex  === -1 && divName !== 'root') {
 	          data.data.root.component._componentIds.push(divName);
 	          component = new components[name](divName); //This is where the CMP objects are, you must create an instance of it and save that to the room cmp
+	          component.setDispatch(dispatch);
 	          data.data.root.component.components.push(component);
-	          console.log('cmp', data.data.root.component);
 	        } else {
 	          component = data.data.root.component.components[componentIndex];
 	        }
 
 	        //ensure the cmp is wrapped by it's id
+	        setTimeout(() => component.bindActions(), 0);
 	        return '<div id="' + divName + '" data-component="' + name + '">'+component.render(data.hash)+'</div>';
 	    });
 	}
@@ -1467,7 +1459,7 @@
 	        }
 	    };
 
-	    trySubscribe();
+	    // trySubscribe(); // this was causing the page to render twice, which didn't seem to break anything but it pissed me off
 	}
 
 
@@ -3217,14 +3209,9 @@
 	    }, {
 	        key: 'shouldComponentUpdate',
 	        value: function shouldComponentUpdate(props, state) {
-	            // if (this.properties) {
-	            //     return this.changesIn(this.properties, props);
-	            // }
-
 	            if (!_underscore2.default.isEqual(this.props, props)) {
 	                return true;
 	            }
-
 	            return false;
 	        }
 	    }, {
@@ -3256,7 +3243,6 @@
 	                        data[modNodeName] = attribute.nodeValue;
 	                    }
 	                });
-
 	                // Here, we're only tracking onclick. Eventually, we may want to track
 	                // more
 	                var actionableProperties = ['onclick', 'onsubmit', 'onchange', 'onkeyup'];
@@ -3291,7 +3277,7 @@
 	        */
 	        key: 'render',
 	        value: function render(passedDownProps) {
-	            var willUpdate = this.shouldComponentUpdate(passedDownProps, this.getState()) || this.forceUpdate;
+	            var willUpdate = this.shouldComponentUpdate(passedDownProps, this.getState());
 	            console.log('rendering', this.el, willUpdate);
 	            if (willUpdate) {
 	              this.html = this.toHtml(passedDownProps);
@@ -9244,6 +9230,7 @@
 	    var state = arguments.length <= 0 || arguments[0] === undefined ? initialState : arguments[0];
 	    var action = arguments[1];
 
+	    console.log('ACTION: ', action.type);
 	    switch (action.type) {
 	        case _actions.INIT_WITH_DATA:
 	            return _underscore2.default.extend(state, action.data);

@@ -113,14 +113,9 @@ var HandlebarsComponent = function () {
     }, {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(props, state) {
-            // if (this.properties) {
-            //     return this.changesIn(this.properties, props);
-            // }
-
             if (!_underscore2.default.isEqual(this.props, props)) {
                 return true;
             }
-
             return false;
         }
     }, {
@@ -152,7 +147,6 @@ var HandlebarsComponent = function () {
                         data[modNodeName] = attribute.nodeValue;
                     }
                 });
-
                 // Here, we're only tracking onclick. Eventually, we may want to track
                 // more
                 var actionableProperties = ['onclick', 'onsubmit', 'onchange', 'onkeyup'];
@@ -187,7 +181,7 @@ var HandlebarsComponent = function () {
         */
         key: 'render',
         value: function render(passedDownProps) {
-            var willUpdate = this.shouldComponentUpdate(passedDownProps, this.getState()) || this.forceUpdate;
+            var willUpdate = this.shouldComponentUpdate(passedDownProps, this.getState());
             console.log('rendering', this.el, willUpdate);
             if (willUpdate) {
               this.html = this.toHtml(passedDownProps);

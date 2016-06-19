@@ -10,14 +10,9 @@ import { HandlebarsComponent } from 'handlebars-redux';
 //    component
 class App extends HandlebarsComponent
 {
-    shouldComponentUpdate(props, state)
-    {
-        return false;
-    }
-
     constructor(el)
     {
-        super();        
+        super();
         this.view = appTemplate;
         this.init(el);
     }
