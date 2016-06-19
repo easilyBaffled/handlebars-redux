@@ -1,0 +1,9 @@
+{{log props}}
+<a data-onclick="toggleTodoStatus"
+    data-status="{{props.todo.done}}"
+    data-todo-id="{{props.todo.id}}"
+    data-list-id="{{props.listId}}"
+    class="{{#if props.todo.done}}done{{/if}}"
+    key=props.index>
+    {{props.todo.text}} <\ 'ItemStatus' status=props.todo.done key=props.index/>
+</a>

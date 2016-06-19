@@ -1398,6 +1398,9 @@
 	    var dispatch = function dispatch(action) {
 	        store.dispatch(action);
 	    };
+	    Handlebars.registerHelper('log', function (input, data) {
+	      console.log('logging helper', input);
+	    });
 	    Handlebars.registerHelper('component', function (name, data) { // Nam
 	        var divName = null;
 
@@ -1444,12 +1447,10 @@
 	    /*
 	    * app element to DOM anchor element
 	    */
-	    var el = domElement(component.el);
-	    el.innerHTML = component.render();
-
 	    var handleStateChange = function handleStateChange() {
+	        var el = domElement(component.el);
 	        component.setDispatch(dispatch);
-	        component.render((0, _nodeDeepcopy.deepCopy)(store.getState()));
+	        el.innerHTML = component.render((0, _nodeDeepcopy.deepCopy)(store.getState()));
 	    };
 
 	    var trySubscribe = function trySubscribe(stateChangeHandler) {
@@ -1459,7 +1460,7 @@
 	        }
 	    };
 
-	    // trySubscribe(); // this was causing the page to render twice, which didn't seem to break anything but it pissed me off
+	    trySubscribe();
 	}
 
 
@@ -3280,21 +3281,12 @@
 	            var willUpdate = this.shouldComponentUpdate(passedDownProps, this.getState());
 	            console.log('rendering', this.el, willUpdate);
 	            if (willUpdate) {
-	              this.html = this.toHtml(passedDownProps);
 	              this.componentWillUpdate(passedDownProps, this.getState());
-	              this.toHtml(passedDownProps);
+	              this.html = this.toHtml(passedDownProps);
 	              this.componentDidUpdate();
 	            }
 	            this.cleanup();
 	            return this.html; //this.bindActions(el) has to be called at some point;
-	            // let ret = false;
-	            // if (domElement(this.el)) {
-	            //   console.log('rendering', this.el, passedDownProps);
-	            //   var el = domElement(this.el);
-	            //   ret = this.toHtml(passedDownProps);
-	            //   el.innerHTML = this.toHtml(passedDownProps);
-	            //   this.bindActions(el);
-	            // }
 
 	        }
 	    }, {
@@ -3341,6 +3333,10 @@
 
 	var _ItemStatus2 = _interopRequireDefault(_ItemStatus);
 
+	var _TodoItem = __webpack_require__(78);
+
+	var _TodoItem2 = _interopRequireDefault(_TodoItem);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	// This list of components is used to make make it easier to include
@@ -3349,7 +3345,8 @@
 	    Lists: _Lists2.default,
 	    List: _List2.default,
 	    Label: _Label2.default,
-	    ItemStatus: _ItemStatus2.default
+	    ItemStatus: _ItemStatus2.default,
+	    TodoItem: _TodoItem2.default
 	};
 
 /***/ },
@@ -3636,24 +3633,12 @@
 	    + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1)) != null ? stack1.todos : stack1),{"name":"each","hash":{},"fn":container.program(2, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
 	    + "        </ul>\n";
 	},"2":function(container,depth0,helpers,partials,data,blockParams,depths) {
-	    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+	    var stack1;
 
-	  return "                <li>\n                    <a data-onclick=\"toggleTodoStatus\"\n                        data-status=\""
-	    + alias4(((helper = (helper = helpers.done || (depth0 != null ? depth0.done : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"done","hash":{},"data":data}) : helper)))
-	    + "\"\n                        data-todo-id=\""
-	    + alias4(((helper = (helper = helpers.id || (depth0 != null ? depth0.id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"id","hash":{},"data":data}) : helper)))
-	    + "\"\n                        data-list-id=\""
-	    + alias4(container.lambda(((stack1 = ((stack1 = (depths[1] != null ? depths[1].props : depths[1])) != null ? stack1.list : stack1)) != null ? stack1.id : stack1), depth0))
-	    + "\"\n                        class=\""
-	    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.done : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0, blockParams, depths),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "\">\n                        "
-	    + alias4(((helper = (helper = helpers.text || (depth0 != null ? depth0.text : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"text","hash":{},"data":data}) : helper)))
-	    + " "
-	    + ((stack1 = (helpers.component || (depth0 && depth0.component) || alias2).call(alias1,"ItemStatus",{"name":"component","hash":{"key":(data && data.index),"status":(depth0 != null ? depth0.done : depth0)},"data":data})) != null ? stack1 : "")
-	    + "\n                    </a>\n\n                </li>\n";
-	},"3":function(container,depth0,helpers,partials,data) {
-	    return "done";
-	},"5":function(container,depth0,helpers,partials,data) {
+	  return "                <li>\n                    "
+	    + ((stack1 = (helpers.component || (depth0 && depth0.component) || helpers.helperMissing).call(depth0 != null ? depth0 : {},"TodoItem",{"name":"component","hash":{"index":(data && data.index),"listId":((stack1 = ((stack1 = (depths[1] != null ? depths[1].props : depths[1])) != null ? stack1.list : stack1)) != null ? stack1.id : stack1),"todo":depth0},"data":data})) != null ? stack1 : "")
+	    + "\n                </li>\n";
+	},"4":function(container,depth0,helpers,partials,data) {
 	    return "        <p class=\"notice\">Those todos aren't going to add themselves. Let's add some todos where we can get to done.</p>\n";
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data,blockParams,depths) {
 	    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=container.lambda, alias3=container.escapeExpression;
@@ -3663,7 +3648,7 @@
 	    + "\n    <a data-onclick=\"closeList\" class=\"back-btn\">back</a>\n    <h1>"
 	    + alias3(alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1)) != null ? stack1.name : stack1), depth0))
 	    + "</h1>\n"
-	    + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1)) != null ? stack1.todos : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.program(5, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
+	    + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1)) != null ? stack1.todos : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0, blockParams, depths),"inverse":container.program(4, data, 0, blockParams, depths),"data":data})) != null ? stack1 : "")
 	    + "    <form data-onsubmit=\"addTodo\" data-list-id=\""
 	    + alias3(alias2(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1)) != null ? stack1.id : stack1), depth0))
 	    + "\">\n        <input id=\"todo-text\" type=\"text\" name=\"todo\" placeholder=\"Enter your todo and press enter\">\n    </form>\n</div>\n";
@@ -9265,6 +9250,100 @@
 	            return state;
 	    }
 	}
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _getFormData = __webpack_require__(29);
+
+	var _getFormData2 = _interopRequireDefault(_getFormData);
+
+	var _todoItem = __webpack_require__(79);
+
+	var _todoItem2 = _interopRequireDefault(_todoItem);
+
+	var _utils = __webpack_require__(31);
+
+	var _actions = __webpack_require__(32);
+
+	var _handlebarsRedux = __webpack_require__(22);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Components roughly follow the React lifecycle. You can:
+	//  - use `shouldComponentUpdate` to determine if `render` should be called
+	//  - use `componentDidUpdate` to manipulate anything in the dom
+	//  - Use `properties` (a list of property keys) to indicate what properties matter to this
+	//    component
+
+	var TodoItem = function (_HandlebarsComponent) {
+	    _inherits(TodoItem, _HandlebarsComponent);
+
+	    function TodoItem(el) {
+	        _classCallCheck(this, TodoItem);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TodoItem).call(this));
+
+	        _this.view = _todoItem2.default;
+	        _this.init(el);
+	        return _this;
+	    }
+
+	    _createClass(TodoItem, [{
+	        key: 'toggleTodoStatus',
+	        value: function toggleTodoStatus(e, params) {
+	            console.log('func params', params, this.props);
+	            var done = !(params.status == 'true');
+	            this.dispatch((0, _actions.setTodoStatus)(params.todoId, params.listId, done));
+	        }
+	    }]);
+
+	    return TodoItem;
+	}(_handlebarsRedux.HandlebarsComponent);
+
+	exports.default = TodoItem;
+
+/***/ },
+/* 79 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(3);
+	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+	    return "done";
+	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=container.escapeExpression, alias3=container.lambda;
+
+	  return alias2(helpers.log.call(alias1,(depth0 != null ? depth0.props : depth0),{"name":"log","hash":{},"data":data}))
+	    + "\n<a data-onclick=\"toggleTodoStatus\"\n    data-status=\""
+	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1), depth0))
+	    + "\"\n    data-todo-id=\""
+	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.id : stack1), depth0))
+	    + "\"\n    data-list-id=\""
+	    + alias2(alias3(((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.listId : stack1), depth0))
+	    + "\"\n    class=\""
+	    + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "\"\n    key=props.index>\n    "
+	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.text : stack1), depth0))
+	    + " "
+	    + ((stack1 = (helpers.component || (depth0 && depth0.component) || helpers.helperMissing).call(alias1,"ItemStatus",{"name":"component","hash":{"key":((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.index : stack1),"status":((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1)},"data":data})) != null ? stack1 : "")
+	    + "\n</a>\n";
+	},"useData":true});
 
 /***/ }
 /******/ ]);

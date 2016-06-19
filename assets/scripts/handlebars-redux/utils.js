@@ -30,6 +30,9 @@ function registerComponents(Handlebars, components, store) {
     var dispatch = function dispatch(action) {
         store.dispatch(action);
     };
+    Handlebars.registerHelper('log', function (input, data) {
+      console.log('logging helper', input);
+    });
     Handlebars.registerHelper('component', function (name, data) { // Nam
         var divName = null;
 
@@ -76,12 +79,10 @@ function connect(store, component) {
     /*
     * app element to DOM anchor element
     */
-    var el = domElement(component.el);
-    el.innerHTML = component.render();
-
     var handleStateChange = function handleStateChange() {
+        var el = domElement(component.el);
         component.setDispatch(dispatch);
-        component.render((0, _nodeDeepcopy.deepCopy)(store.getState()));
+        el.innerHTML = component.render((0, _nodeDeepcopy.deepCopy)(store.getState()));
     };
 
     var trySubscribe = function trySubscribe(stateChangeHandler) {
@@ -91,5 +92,5 @@ function connect(store, component) {
         }
     };
 
-    // trySubscribe(); // this was causing the page to render twice, which didn't seem to break anything but it pissed me off
+    trySubscribe();
 }

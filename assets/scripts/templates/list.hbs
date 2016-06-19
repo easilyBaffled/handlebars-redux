@@ -6,14 +6,7 @@
         <ul>
             {{#each props.list.todos}}
                 <li>
-                    <a data-onclick="toggleTodoStatus"
-                        data-status="{{done}}"
-                        data-todo-id="{{id}}"
-                        data-list-id="{{../props.list.id}}"
-                        class="{{#if done}}done{{/if}}">
-                        {{text}} <\ 'ItemStatus' status=done key=@index/>
-                    </a>
-
+                    <\ 'TodoItem' todo=this listId=../props.list.id index=@index />
                 </li>
             {{/each}}
         </ul>

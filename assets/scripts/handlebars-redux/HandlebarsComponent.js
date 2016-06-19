@@ -184,21 +184,12 @@ var HandlebarsComponent = function () {
             var willUpdate = this.shouldComponentUpdate(passedDownProps, this.getState());
             console.log('rendering', this.el, willUpdate);
             if (willUpdate) {
-              this.html = this.toHtml(passedDownProps);
               this.componentWillUpdate(passedDownProps, this.getState());
-              this.toHtml(passedDownProps);
+              this.html = this.toHtml(passedDownProps);
               this.componentDidUpdate();
             }
             this.cleanup();
             return this.html; //this.bindActions(el) has to be called at some point;
-            // let ret = false;
-            // if (domElement(this.el)) {
-            //   console.log('rendering', this.el, passedDownProps);
-            //   var el = domElement(this.el);
-            //   ret = this.toHtml(passedDownProps);
-            //   el.innerHTML = this.toHtml(passedDownProps);
-            //   this.bindActions(el);
-            // }
 
         }
     }, {
