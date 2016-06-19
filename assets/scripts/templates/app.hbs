@@ -1,4 +1,5 @@
 <div>
-    {{{component 'Lists'}}}
-    {{{component 'List'}}}
+    <h1>canary {{props.test}}</h1>
+    {{#unless props.list}}{{{component 'Lists' foo='test'}}}{{/unless}}
+    {{#if props.list}}{{{component 'List'}}}{{/if}}
 </div>

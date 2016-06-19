@@ -1,4 +1,6 @@
-<div class="{{#unless props.list}}hidden{{/unless}}">
+<div>
+    little canary
+    {{{component 'Label' size=props.list.todos.length}}}
     <a data-onclick="closeList" class="back-btn">back</a>
     <h1>{{props.list.name}}</h1>
     {{#if props.list.todos}}
