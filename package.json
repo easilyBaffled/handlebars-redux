@@ -19,6 +19,7 @@
     "node-deepcopy": "^0.1.1",
     "node-uuid": "^1.4.7",
     "redux": "^3.5.2",
+    "string-replace-webpack-plugin": "0.0.3",
     "tiny-cookie": "^0.5.5",
     "underscore": "^1.8.3",
     "webpack": "^1.13.0"

@@ -10,17 +10,13 @@ import { initWithData } from './actions';
 import { todoApp } from './reducer';
 
 let store = createStore(todoApp);
-console.log('createStore');
-
 
 // This attaches the component helper to our handlebars runtime
 // along with any child components that are to be dynamically generated w/n .hbs
 registerComponents(Handlebars, components, store);
-console.log('registerComponents');
 // This connects our store to our root component. All of our state changes
 // will go through this route component and filter down to the child components
 connect(store, new App(document.getElementById('todo-app')));
-console.log('connect');
 // This is a listener to passively save our todo state, so that when we
 // reload the page, we can re-init the app
 const cookieParam = 'TodoAppData-1';

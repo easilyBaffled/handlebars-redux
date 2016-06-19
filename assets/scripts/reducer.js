@@ -6,7 +6,6 @@ import { CREATE_TODO, CLOSE_LIST, CREATE_LIST, SET_LIST, INIT_WITH_DATA, SET_TOD
 const initialState = {
     lists: [],
     list: null,
-    test: 'A Test'
 };
 
 function itemById(id, items) {

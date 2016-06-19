@@ -27,32 +27,44 @@ function registerComponents(Handlebars, components, store) {
     //    {{{component 'ContentWithId' id='content-with-id'}}}
     //    {{{component 'ContentWithData' props='data'}}} <- this data is available via data.hash.pros
     // </div>
+    var dispatch = function dispatch(action) {
+        store.dispatch(action);
+    };
     Handlebars.registerHelper('component', function (name, data) { // Nam
-        console.log(name);
         var divName = null;
 
         if (data.hash.id) {
             divName = data.hash.id;
         } else {
             divName = name.replace(/([a-z])([A-Z])/g, '$1-$2').toLowerCase();
-            divName = 'handlebar-component-' + divName;
+            divName = 'handlebar-component-' + divName + (data.hash.key||'0'); // possibly manually check the parent for others of this type
         }
-        // divName += (Math.floor(Math.random() * 1000) + 1).toString();
         // Make sure we don't load up multiple copies of the child component
-        var componentLoaded = data.data.root.component._componentIds.indexOf(divName) !== -1;
-        if (!componentLoaded) {
-            var component = new components[name](divName);
-            const unSubscribe = store.subscribe(() => {
-              component.render(data.hash);
-            });
-            component.setUnsubscribe(unSubscribe);
-            data.data.root.component.components.push(component);
+        var componentIndex = data.data.root.component._componentIds.indexOf(divName);
+        var component;
+        console.log('component helper: ', name, data, componentIndex);
+        if (componentIndex  === -1) {
+          data.data.root.component._componentIds.push(divName);
+          component = new components[name](divName); //This is where the CMP objects are, you must create an instance of it and save that to the room cmp
+          data.data.root.component.components.push(component);
+          console.log('cmp', data.data.root.component);
+        } else {
+          component = data.data.root.component.components[componentIndex];
         }
 
-        // Returns a placeholder div to render child component
-        return '<div id="' + divName + '" data-component="' + name + '"></div>';
+        //ensure the cmp is wrapped by it's id
+        return '<div id="' + divName + '" data-component="' + name + '">'+component.render(data.hash)+'</div>';
     });
 }
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+var domElement = function domElement(identifier) {
+    if ((typeof identifier === 'undefined' ? 'undefined' : _typeof(identifier)) === 'object') {
+        return identifier;
+    }
+
+    return document.getElementById(identifier);
+};
 
 function connect(store, component) {
     var unsubscribe = null;
@@ -60,11 +72,15 @@ function connect(store, component) {
     var dispatch = function dispatch(action) {
         store.dispatch(action);
     };
+    /*
+    * app element to DOM anchor element
+    */
+    var el = domElement(component.el);
+    el.innerHTML = component.render();
 
     var handleStateChange = function handleStateChange() {
         component.setDispatch(dispatch);
-        console.log('store State', store.getState());
-        component.handleChange((0, _nodeDeepcopy.deepCopy)(store.getState()));
+        component.render((0, _nodeDeepcopy.deepCopy)(store.getState()));
     };
 
     var trySubscribe = function trySubscribe(stateChangeHandler) {

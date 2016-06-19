@@ -1,6 +1,5 @@
 <div>
-    little canary
-    {{{component 'Label' size=props.list.todos.length}}}
+    <\ 'Label' size=props.list.todos.length />
     <a data-onclick="closeList" class="back-btn">back</a>
     <h1>{{props.list.name}}</h1>
     {{#if props.list.todos}}
@@ -12,8 +11,9 @@
                         data-todo-id="{{id}}"
                         data-list-id="{{../props.list.id}}"
                         class="{{#if done}}done{{/if}}">
-                        {{text}}
+                        {{text}} <\ 'ItemStatus' status=done key=@index/>
                     </a>
+
                 </li>
             {{/each}}
         </ul>

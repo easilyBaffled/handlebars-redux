@@ -32,6 +32,7 @@ var HandlebarsComponent = function () {
     _createClass(HandlebarsComponent, [{
         key: 'init',
         value: function init(el) {
+            console.log('creating', el);
             this._componentIds = [];
             this.el = el || null;
             this.components = [];
@@ -42,6 +43,8 @@ var HandlebarsComponent = function () {
             this.unSubscribe = null;
             this.view = this.view || null;
             this.forceUpdate = true;
+            this.html = '';
+            this.render;
         }
     }, {
         key: 'setDispatch',
@@ -71,7 +74,6 @@ var HandlebarsComponent = function () {
     }, {
         key: 'setUnsubscribe',
         value: function setState(unSubscribe) {
-            console.log('unSubscribe', this.el)
             this.unSubscribe = unSubscribe;
         }
     }, {
@@ -88,10 +90,11 @@ var HandlebarsComponent = function () {
                 this.cleanup();
             }
 
-            _underscore2.default.each(this.components, function (component) {
-                component.setDispatch(dispatch);
-                component.handleChange(nextProps);
-            });
+            // _underscore2.default.each(this.components, function (component) {
+            //     console.log('cmp handle change', component);
+            //     component.setDispatch(dispatch);
+            //     component.handleChange(nextProps);
+            // });
 
             if (willUpdate) {
                 this.componentDidUpdate();
@@ -110,9 +113,9 @@ var HandlebarsComponent = function () {
     }, {
         key: 'shouldComponentUpdate',
         value: function shouldComponentUpdate(props, state) {
-            if (this.properties) {
-                return this.changesIn(this.properties, props);
-            }
+            // if (this.properties) {
+            //     return this.changesIn(this.properties, props);
+            // }
 
             if (!_underscore2.default.isEqual(this.props, props)) {
                 return true;
@@ -177,17 +180,32 @@ var HandlebarsComponent = function () {
             return this.view(_underscore2.default.extend(renderData));
         }
     }, {
+        /*
+        * There are lifecycle functions like componentWillUpdate, didMount, willMount ect. that need to be included in here
+        * Additionally there needs to be a system inplace to force an update when local state is change,
+        *   Maybe that's a better place for_underscore2.default.each(this.components, function (component) {   component.setDispatch(dispatch); component.handleChange(nextProps); });
+        */
         key: 'render',
         value: function render(passedDownProps) {
-            if (domElement(this.el)) {
-              console.log('rendering', this.el, passedDownProps);
-              var el = domElement(this.el);
-              el.innerHTML = this.toHtml(passedDownProps);
-
-              this.bindActions(el);
-            } else {
-              this.unSubscribe();
+            var willUpdate = this.shouldComponentUpdate(passedDownProps, this.getState()) || this.forceUpdate;
+            console.log('rendering', this.el, willUpdate);
+            if (willUpdate) {
+              this.html = this.toHtml(passedDownProps);
+              this.componentWillUpdate(passedDownProps, this.getState());
+              this.toHtml(passedDownProps);
+              this.componentDidUpdate();
             }
+            this.cleanup();
+            return this.html; //this.bindActions(el) has to be called at some point;
+            // let ret = false;
+            // if (domElement(this.el)) {
+            //   console.log('rendering', this.el, passedDownProps);
+            //   var el = domElement(this.el);
+            //   ret = this.toHtml(passedDownProps);
+            //   el.innerHTML = this.toHtml(passedDownProps);
+            //   this.bindActions(el);
+            // }
+
         }
     }, {
         key: 'componentDidUpdate',
