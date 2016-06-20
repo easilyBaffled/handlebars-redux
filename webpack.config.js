@@ -3,6 +3,7 @@
 var path = require('path');
 var webpack = require('webpack');
 var StringReplacePlugin = require("string-replace-webpack-plugin");
+var WebpackBuildNotifierPlugin = require('webpack-build-notifier');
 
 var isProduction = process.env.NODE_ENV === 'production';
 
@@ -10,7 +11,8 @@ var plugins = [
     new webpack.DefinePlugin({
         'process.env.NODE_ENV': '"' + process.env.NODE_ENV + '"'
     }),
-    new StringReplacePlugin()
+    new StringReplacePlugin(),
+    new WebpackBuildNotifierPlugin()
 ];
 
 if (isProduction) {
@@ -20,8 +22,9 @@ if (isProduction) {
 module.exports = {
     entry: './assets/scripts/app.js',
     output: {
-        path: __dirname,
-        filename: 'dist/scripts/app.js'
+        path: path.join(__dirname, 'dist/scripts'),
+        publicPath: 'dist/scripts',
+        filename: 'app.js'
     },
     module: {
         preLoaders: [
@@ -30,7 +33,7 @@ module.exports = {
         loaders: [
             { test: /\.js$/, exclude: /node_modules/, loader: 'babel-loader' },
             { test: /\.hbs$/, loader: 'handlebars-loader', exclude: /node_modules/ },
-            { test: /\.hbs$/, loader: StringReplacePlugin.replace({
+            { test: /\.hbs$/, include: path.resolve('./assets/scripts/templates'), loader: StringReplacePlugin.replace({
                 replacements: [
                     {
                         pattern: /(<\\\s*)(.*)(\s*\/>)/g,

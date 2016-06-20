@@ -54,7 +54,7 @@
 
 	var _main2 = _interopRequireDefault(_main);
 
-	var _tinyCookie = __webpack_require__(63);
+	var _tinyCookie = __webpack_require__(65);
 
 	var _tinyCookie2 = _interopRequireDefault(_tinyCookie);
 
@@ -64,11 +64,11 @@
 
 	var _handlebarsRedux = __webpack_require__(22);
 
-	var _redux = __webpack_require__(64);
+	var _redux = __webpack_require__(66);
 
 	var _actions = __webpack_require__(32);
 
-	var _reducer = __webpack_require__(77);
+	var _reducer = __webpack_require__(79);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -157,7 +157,7 @@
 	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1, alias1=depth0 != null ? depth0 : {};
 
-	  return "<div id='root'>\n    "
+	  return "<div id='root'>    \n    "
 	    + ((stack1 = helpers.unless.call(alias1,((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1),{"name":"unless","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
 	    + "\n    "
 	    + ((stack1 = helpers["if"].call(alias1,((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.list : stack1),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -3333,7 +3333,7 @@
 
 	var _ItemStatus2 = _interopRequireDefault(_ItemStatus);
 
-	var _TodoItem = __webpack_require__(78);
+	var _TodoItem = __webpack_require__(63);
 
 	var _TodoItem2 = _interopRequireDefault(_TodoItem);
 
@@ -3736,6 +3736,7 @@
 
 	var CREATE_TODO = exports.CREATE_TODO = 'CREATE_TODO';
 	function createTodo(todoText, listId) {
+	    console.log('updating');
 	    var todo = {
 	        text: todoText,
 	        id: _nodeUuid2.default.v4(),
@@ -8116,9 +8117,9 @@
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 
-	  return "<h1>\n  label\n  "
+	  return "<h3>\n  label\n  "
 	    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.size : stack1), depth0))
-	    + "\n</h1>\n";
+	    + "\n</h3>\n";
 	},"useData":true});
 
 /***/ },
@@ -8186,13 +8187,107 @@
 	module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
 	    var stack1;
 
-	  return "<h1>\n  Status\n  "
+	  return "<h3>\n  "
 	    + container.escapeExpression(container.lambda(((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.status : stack1), depth0))
-	    + "\n</h1>\n";
+	    + "\n</h3>\n";
 	},"useData":true});
 
 /***/ },
 /* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	    value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _getFormData = __webpack_require__(29);
+
+	var _getFormData2 = _interopRequireDefault(_getFormData);
+
+	var _todoItem = __webpack_require__(64);
+
+	var _todoItem2 = _interopRequireDefault(_todoItem);
+
+	var _utils = __webpack_require__(31);
+
+	var _actions = __webpack_require__(32);
+
+	var _handlebarsRedux = __webpack_require__(22);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	// Components roughly follow the React lifecycle. You can:
+	//  - use `shouldComponentUpdate` to determine if `render` should be called
+	//  - use `componentDidUpdate` to manipulate anything in the dom
+	//  - Use `properties` (a list of property keys) to indicate what properties matter to this
+	//    component
+
+	var TodoItem = function (_HandlebarsComponent) {
+	    _inherits(TodoItem, _HandlebarsComponent);
+
+	    function TodoItem(el) {
+	        _classCallCheck(this, TodoItem);
+
+	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TodoItem).call(this));
+
+	        _this.view = _todoItem2.default;
+	        _this.init(el);
+	        return _this;
+	    }
+
+	    _createClass(TodoItem, [{
+	        key: 'toggleTodoStatus',
+	        value: function toggleTodoStatus(e, params) {
+	            console.log('func params', params, this.props);
+	            var done = !(params.status == 'true');
+	            this.dispatch((0, _actions.setTodoStatus)(params.todoId, params.listId, done));
+	        }
+	    }]);
+
+	    return TodoItem;
+	}(_handlebarsRedux.HandlebarsComponent);
+
+	exports.default = TodoItem;
+
+/***/ },
+/* 64 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Handlebars = __webpack_require__(3);
+	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
+	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
+	    return "done";
+	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
+	    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=container.escapeExpression, alias3=container.lambda;
+
+	  return alias2(helpers.log.call(alias1,(depth0 != null ? depth0.props : depth0),{"name":"log","hash":{},"data":data}))
+	    + "\n<a data-onclick=\"toggleTodoStatus\"\n    data-status=\""
+	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1), depth0))
+	    + "\"\n    data-todo-id=\""
+	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.id : stack1), depth0))
+	    + "\"\n    data-list-id=\""
+	    + alias2(alias3(((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.listId : stack1), depth0))
+	    + "\"\n    class=\""
+	    + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+	    + "\"\n    key=props.index>\n    "
+	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.text : stack1), depth0))
+	    + " "
+	    + ((stack1 = (helpers.component || (depth0 && depth0.component) || helpers.helperMissing).call(alias1,"ItemStatus",{"name":"component","hash":{"key":((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.index : stack1),"status":((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1)},"data":data})) != null ? stack1 : "")
+	    + "\n</a>\n";
+	},"useData":true});
+
+/***/ },
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -8342,7 +8437,7 @@
 
 
 /***/ },
-/* 64 */
+/* 66 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8350,27 +8445,27 @@
 	exports.__esModule = true;
 	exports.compose = exports.applyMiddleware = exports.bindActionCreators = exports.combineReducers = exports.createStore = undefined;
 
-	var _createStore = __webpack_require__(65);
+	var _createStore = __webpack_require__(67);
 
 	var _createStore2 = _interopRequireDefault(_createStore);
 
-	var _combineReducers = __webpack_require__(72);
+	var _combineReducers = __webpack_require__(74);
 
 	var _combineReducers2 = _interopRequireDefault(_combineReducers);
 
-	var _bindActionCreators = __webpack_require__(74);
+	var _bindActionCreators = __webpack_require__(76);
 
 	var _bindActionCreators2 = _interopRequireDefault(_bindActionCreators);
 
-	var _applyMiddleware = __webpack_require__(75);
+	var _applyMiddleware = __webpack_require__(77);
 
 	var _applyMiddleware2 = _interopRequireDefault(_applyMiddleware);
 
-	var _compose = __webpack_require__(76);
+	var _compose = __webpack_require__(78);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
-	var _warning = __webpack_require__(73);
+	var _warning = __webpack_require__(75);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -8393,7 +8488,7 @@
 	exports.compose = _compose2["default"];
 
 /***/ },
-/* 65 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8402,11 +8497,11 @@
 	exports.ActionTypes = undefined;
 	exports["default"] = createStore;
 
-	var _isPlainObject = __webpack_require__(66);
+	var _isPlainObject = __webpack_require__(68);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _symbolObservable = __webpack_require__(70);
+	var _symbolObservable = __webpack_require__(72);
 
 	var _symbolObservable2 = _interopRequireDefault(_symbolObservable);
 
@@ -8660,12 +8755,12 @@
 	}
 
 /***/ },
-/* 66 */
+/* 68 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var getPrototype = __webpack_require__(67),
-	    isHostObject = __webpack_require__(68),
-	    isObjectLike = __webpack_require__(69);
+	var getPrototype = __webpack_require__(69),
+	    isHostObject = __webpack_require__(70),
+	    isObjectLike = __webpack_require__(71);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -8736,7 +8831,7 @@
 
 
 /***/ },
-/* 67 */
+/* 69 */
 /***/ function(module, exports) {
 
 	/* Built-in method references for those with the same name as other `lodash` methods. */
@@ -8757,7 +8852,7 @@
 
 
 /***/ },
-/* 68 */
+/* 70 */
 /***/ function(module, exports) {
 
 	/**
@@ -8783,7 +8878,7 @@
 
 
 /***/ },
-/* 69 */
+/* 71 */
 /***/ function(module, exports) {
 
 	/**
@@ -8818,18 +8913,18 @@
 
 
 /***/ },
-/* 70 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {/* global window */
 	'use strict';
 
-	module.exports = __webpack_require__(71)(global || window || this);
+	module.exports = __webpack_require__(73)(global || window || this);
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 71 */
+/* 73 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -8854,7 +8949,7 @@
 
 
 /***/ },
-/* 72 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -8862,13 +8957,13 @@
 	exports.__esModule = true;
 	exports["default"] = combineReducers;
 
-	var _createStore = __webpack_require__(65);
+	var _createStore = __webpack_require__(67);
 
-	var _isPlainObject = __webpack_require__(66);
+	var _isPlainObject = __webpack_require__(68);
 
 	var _isPlainObject2 = _interopRequireDefault(_isPlainObject);
 
-	var _warning = __webpack_require__(73);
+	var _warning = __webpack_require__(75);
 
 	var _warning2 = _interopRequireDefault(_warning);
 
@@ -8986,7 +9081,7 @@
 	}
 
 /***/ },
-/* 73 */
+/* 75 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -9016,7 +9111,7 @@
 	}
 
 /***/ },
-/* 74 */
+/* 76 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -9072,7 +9167,7 @@
 	}
 
 /***/ },
-/* 75 */
+/* 77 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9083,7 +9178,7 @@
 
 	exports["default"] = applyMiddleware;
 
-	var _compose = __webpack_require__(76);
+	var _compose = __webpack_require__(78);
 
 	var _compose2 = _interopRequireDefault(_compose);
 
@@ -9135,7 +9230,7 @@
 	}
 
 /***/ },
-/* 76 */
+/* 78 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -9180,7 +9275,7 @@
 	}
 
 /***/ },
-/* 77 */
+/* 79 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -9208,7 +9303,9 @@
 	        return item.id === id;
 	    });
 	}
-
+	/*
+	* TODO: serialize the state tree and save it to localstorage for rehydration purposes
+	*/
 	// This takes the information provided from `./actions.js` and manipulates
 	// the global state that is passed to all components
 	function todoApp() {
@@ -9250,100 +9347,6 @@
 	            return state;
 	    }
 	}
-
-/***/ },
-/* 78 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _getFormData = __webpack_require__(29);
-
-	var _getFormData2 = _interopRequireDefault(_getFormData);
-
-	var _todoItem = __webpack_require__(79);
-
-	var _todoItem2 = _interopRequireDefault(_todoItem);
-
-	var _utils = __webpack_require__(31);
-
-	var _actions = __webpack_require__(32);
-
-	var _handlebarsRedux = __webpack_require__(22);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	// Components roughly follow the React lifecycle. You can:
-	//  - use `shouldComponentUpdate` to determine if `render` should be called
-	//  - use `componentDidUpdate` to manipulate anything in the dom
-	//  - Use `properties` (a list of property keys) to indicate what properties matter to this
-	//    component
-
-	var TodoItem = function (_HandlebarsComponent) {
-	    _inherits(TodoItem, _HandlebarsComponent);
-
-	    function TodoItem(el) {
-	        _classCallCheck(this, TodoItem);
-
-	        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(TodoItem).call(this));
-
-	        _this.view = _todoItem2.default;
-	        _this.init(el);
-	        return _this;
-	    }
-
-	    _createClass(TodoItem, [{
-	        key: 'toggleTodoStatus',
-	        value: function toggleTodoStatus(e, params) {
-	            console.log('func params', params, this.props);
-	            var done = !(params.status == 'true');
-	            this.dispatch((0, _actions.setTodoStatus)(params.todoId, params.listId, done));
-	        }
-	    }]);
-
-	    return TodoItem;
-	}(_handlebarsRedux.HandlebarsComponent);
-
-	exports.default = TodoItem;
-
-/***/ },
-/* 79 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Handlebars = __webpack_require__(3);
-	function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
-	module.exports = (Handlebars["default"] || Handlebars).template({"1":function(container,depth0,helpers,partials,data) {
-	    return "done";
-	},"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
-	    var stack1, alias1=depth0 != null ? depth0 : {}, alias2=container.escapeExpression, alias3=container.lambda;
-
-	  return alias2(helpers.log.call(alias1,(depth0 != null ? depth0.props : depth0),{"name":"log","hash":{},"data":data}))
-	    + "\n<a data-onclick=\"toggleTodoStatus\"\n    data-status=\""
-	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1), depth0))
-	    + "\"\n    data-todo-id=\""
-	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.id : stack1), depth0))
-	    + "\"\n    data-list-id=\""
-	    + alias2(alias3(((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.listId : stack1), depth0))
-	    + "\"\n    class=\""
-	    + ((stack1 = helpers["if"].call(alias1,((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-	    + "\"\n    key=props.index>\n    "
-	    + alias2(alias3(((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.text : stack1), depth0))
-	    + " "
-	    + ((stack1 = (helpers.component || (depth0 && depth0.component) || helpers.helperMissing).call(alias1,"ItemStatus",{"name":"component","hash":{"key":((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.index : stack1),"status":((stack1 = ((stack1 = (depth0 != null ? depth0.props : depth0)) != null ? stack1.todo : stack1)) != null ? stack1.done : stack1)},"data":data})) != null ? stack1 : "")
-	    + "\n</a>\n";
-	},"useData":true});
 
 /***/ }
 /******/ ]);

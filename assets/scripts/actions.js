@@ -37,6 +37,7 @@ export function closeList() {
 
 export const CREATE_TODO = 'CREATE_TODO';
 export function createTodo(todoText, listId) {
+    console.log('updating');
     let todo = {
         text: todoText,
         id: uuid.v4(),

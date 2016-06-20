@@ -13,7 +13,9 @@ function itemById(id, items) {
         return item.id === id;
     });
 }
-
+/*
+* TODO: serialize the state tree and save it to localstorage for rehydration purposes
+*/
 // This takes the information provided from `./actions.js` and manipulates
 // the global state that is passed to all components
 export function todoApp(state=initialState, action)
