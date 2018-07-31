@@ -1,5 +1,7 @@
 # handlebars-redux-example
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/easilyBaffled/handlebars-redux.svg)](https://greenkeeper.io/)
+
 ## Overview
 
 Demo at https://researchsquare.github.io/handlebars-redux-example/
